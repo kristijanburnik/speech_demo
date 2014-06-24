@@ -1,0 +1,39 @@
+body {
+
+  font-family: Arial;
+
+}
+
+
+header {
+  margin-bottom:50px;
+  background:#eee;
+  min-height:250px;
+}
+
+
+header .container {
+  padding-top:100px;
+}
+
+.center-text {
+  text-align:center;
+}
+
+footer {
+  background:black;
+  color:white;
+  min-height:300px;
+}
+
+footer .container {
+  padding-top:50px;
+  padding-bottom:50px;
+}
+
+
+#main {
+  margin-top:100px;
+  margin-bottom:50px;
+  min-height:800px;
+}

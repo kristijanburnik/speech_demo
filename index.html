@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SpeechRecognitionDemo" >
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <!-- Bootstrap CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" >
+
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- APP CSS -->
+    <link href="app.css" rel="stylesheet" type="text/css" >
+
+
+    <title>WebRTC Speech Recognition demo</title>
+
+  </head>
+  <body>
+
+    <header>
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+	          <span style='color:white;'>Menu</span>
+	        </button>
+	        <a class="navbar-brand" href=".">
+
+            <strong>Speech recognition</strong>
+            <span class="label label-danger">DEMO</span>
+          </a>
+        </div>
+        
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+	        <ul class="nav navbar-nav">
+	          <li ng-class="{'active':menu.section=='microphone'}"><a href="#microphone"><i class="fa fa-microphone fa-align-left"></i> Via microphone</a></li>
+            <li ng-class="{'active':menu.section=='recorded'}"><a href="#recorded"><i class="fa fa-file-audio-o fa-align-left"></i> Via recorded audio</a></li>
+	        </ul>			
+	      </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container center-text">
+        <h3>Speech <i class="fa fa-arrow-right"></i> Text</h3>
+      </div>
+    </header>
+
+
+    <div id="main" class="container" ng-controller="MainController">   
+
+      <div class="pull-right">
+        <span class="label label-danger">DEMO</span>
+      </div>
+  
+      <div class="alert alert-info" ng-hide="menu.section">Select an example from the top menu</div>
+
+      <!-- Main View placholder -->
+      <div ng-view></div>
+
+    </div>
+
+    <footer>
+      <div class="container">
+        WebRTC :-)
+      </div>
+    </footer>
+
+
+
+
+    <!-- SUPPORTING SCRIPTS -->
+
+      <!-- jQuery -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>  
+
+      <!-- Bootstrap js -->
+      <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+      <!-- AngularJS -->
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+      <script src="https://code.angularjs.org/1.2.18/angular-route.min.js"></script>
+
+
+    <!-- NG APP -->
+
+      <script src="ngapp/app.js"></script>
+      <script src="ngapp/service.js"></script>
+      <script src="ngapp/controller.js"></script>
+
+  
+  
+
+
+  </body>
+</html>
