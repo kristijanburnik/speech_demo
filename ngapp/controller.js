@@ -15,15 +15,43 @@ app
 })
 
 
-.controller("MainController",function( Menu , $rootScope ){
+.controller("MainController",function( Menu , $rootScope , SpeechRecognition ){
+
 
   $rootScope.menu = Menu;
+  
+  $rootScope.sr = SpeechRecognition;
+  
+  console.info( "SR availability" , SpeechRecognition.isAvailable() );
+  
   
 })
 
 
-.controller("MicrophoneController",function( Menu ){
-  Menu.set('microphone');  
+.controller("MicrophoneController",function( Menu , $rootScope , SpeechRecognition ){
+  Menu.set('microphone');
+  
+  
+  $rootScope.sr = SpeechRecognition;
+  
+  SpeechRecognition
+    .requestUserMedia(function( allowed ){
+       if ( allowed )
+           SpeechRecognition.streamMicrophone()
+                           
+      
+      
+      console.log("User Media decided, allowed = ", allowed);
+      
+      $rootScope.$digest();
+      
+    })
+    .onStart(function(){
+      $rootScope.$digest();
+    })
+    ;
+      
+  
 })
 
 

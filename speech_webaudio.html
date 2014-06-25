@@ -93,7 +93,8 @@ new gweb.analytics.AutoTrack({
 a.c1 {font-weight: normal;}
     </style>
   </head>
-  <video id="audio_track_el" autoplay="true" muted="true"></video>
+  <video id="audio_track_el" autoplay="true" muted="false"></video>
+
   <br>
   <body class="" id="grid">
     <div class="browser-landing" id="main">
@@ -102,6 +103,7 @@ a.c1 {font-weight: normal;}
           <h1>
             <a class="c1">Web Speech + Media Stream Demonstration </a>
           </h1>
+          <img id="start_img">
         </div>
       </div>
       <div class="compact marquee">
@@ -292,6 +294,7 @@ var context = 0;
 var mediaStreamDestination = 0;
 var voiceSoundBuffer = 0;
 var voiceSound = 0;
+var start_img = document.getElementById('start_img');
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {

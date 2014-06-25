@@ -127,9 +127,11 @@ a.c1 {font-weight: normal;}
             Permission to use microphone is blocked. To change, go to
             chrome://settings/contentExceptions#media-stream
           </p>
+          <!-- DONE
           <p id="info_upgrade" style="display: none;">
             Web Speech API is not supported by this browser. Upgrade to <a href="https://www.google.com/chrome">Chrome</a> version 25 or later.
           </p>
+          -->
         </div>
         <div id="results">
           <span class="final" id="final_span"></span> <span class="interim" id="interim_span"></span>
@@ -273,6 +275,9 @@ function updateCountry() {
   select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
 }
 
+
+/// lang ends here
+
 var create_email = false;
 var final_transcript = '';
 var recognizing = false;
@@ -283,40 +288,9 @@ if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
   // TODO(xians): Figure out if changing the audio constraints can help.
-  getUserMedia({audio:true, video:true}, gotStream, function() {});
-  start_button.style.display = 'inline-block';
-  var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  // TODO(xians): true or false??
-  recognition.interimResults = true;
+  
 
-  recognition.onstart = function() {
-    recognizing = true;
-    showInfo('info_speak_now');
-    start_img.src = '/intl/en/chrome/assets/common/images/content/mic-animate.gif';
-  };
-
-  recognition.onerror = function(event) {
-    if (event.error == 'no-speech') {
-      start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
-      showInfo('info_no_speech');
-      ignore_onend = true;
-    }
-    if (event.error == 'audio-capture') {
-      start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
-      showInfo('info_no_microphone');
-      ignore_onend = true;
-    }
-    if (event.error == 'not-allowed') {
-      if (event.timeStamp - start_timestamp < 100) {
-        showInfo('info_blocked');
-      } else {
-        showInfo('info_denied');
-      }
-      ignore_onend = true;
-    }
-  };
-
+  
   recognition.onend = function() {
     recognizing = false;
     if (ignore_onend) {
@@ -372,62 +346,14 @@ function gotStream(stream) {
   local_stream = stream;
 }
 
-function upgrade() {
-  start_button.style.visibility = 'visible';
-  showInfo('info_upgrade');
-}
-
-var two_line = /\n\n/g;
-var one_line = /\n/g;
-function linebreak(s) {
-  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-}
-
-var first_char = /\S/;
-function capitalize(s) {
-  return s.replace(first_char, function(m) { return m.toUpperCase(); });
-}
-
-function createEmail() {
-  var n = final_transcript.indexOf('\n');
-  if (n < 0 || n >= 80) {
-    n = 40 + final_transcript.substring(40).indexOf(' ');
-  }
-  var subject = encodeURI(final_transcript.substring(0, n));
-  var body = encodeURI(final_transcript.substring(n + 1));
-  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
-}
-
-function copyButton() {
-  if (recognizing) {
-    recognizing = false;
-    recognition.stop();
-  }
-  copy_button.style.display = 'none';
-  copy_info.style.display = 'inline-block';
-  showInfo('');
-}
-
-function emailButton() {
-  if (recognizing) {
-    create_email = true;
-    recognizing = false;
-    recognition.stop();
-  } else {
-    createEmail();
-  }
-  email_button.style.display = 'none';
-  email_info.style.display = 'inline-block';
-  showInfo('');
-}
 
 function startButton(event) {
   if (recognizing) {
     recognition.stop();
     return;
   }
-  final_transcript = '';
-  recognition.lang = select_dialect.value;
+//  final_transcript = '';
+ // recognition.lang = select_dialect.value;
   audio_tracks = local_stream.getAudioTracks();
   recognition.connect(audio_tracks[0]);
   recognition.start();
@@ -437,33 +363,9 @@ function startButton(event) {
   start_img.src = '/intl/en/chrome/assets/common/images/content/mic-slash.gif';
   showInfo('info_allow');
   showButtons('none');
-  start_timestamp = event.timeStamp;
+  start_timestamp = event.timeStamp; // handled
 }
 
-function showInfo(s) {
-  if (s) {
-    for (var child = info.firstChild; child; child = child.nextSibling) {
-      if (child.style) {
-        child.style.display = child.id == s ? 'inline' : 'none';
-      }
-    }
-    info.style.visibility = 'visible';
-  } else {
-    info.style.visibility = 'hidden';
-  }
-}
-
-var current_style;
-function showButtons(style) {
-  if (style == current_style) {
-    return;
-  }
-  current_style = style;
-  copy_button.style.display = style;
-  email_button.style.display = style;
-  copy_info.style.display = 'none';
-  email_info.style.display = 'none';
-}
     </script>
   
 </body></html>
