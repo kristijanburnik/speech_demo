@@ -2,10 +2,6 @@
 <!-- saved from url=(0055)https://www.google.com/intl/en/chrome/demos/speech.html -->
 <html class="js consumer  chrome" lang="en" id="mac"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>  
-
-
     <script type="text/javascript" src="./adapter.js"></script>
     <script type="text/javascript" async="" src="./speech_files/ga.js"></script><script>
 (function(e, p){
@@ -83,7 +79,7 @@ new gweb.analytics.AutoTrack({
     display: none;
     margin: 0 70px;
     }
-    < {
+    video {
     border:5px solid black;
     width:480px;
     height:360px;
@@ -93,8 +89,6 @@ new gweb.analytics.AutoTrack({
 a.c1 {font-weight: normal;}
     </style>
   </head>
-  <video id="audio_track_el" autoplay="true" muted="false"></video>
-
   <br>
   <body class="" id="grid">
     <div class="browser-landing" id="main">
@@ -103,7 +97,6 @@ a.c1 {font-weight: normal;}
           <h1>
             <a class="c1">Web Speech + Media Stream Demonstration </a>
           </h1>
-          <img id="start_img">
         </div>
       </div>
       <div class="compact marquee">
@@ -279,38 +272,26 @@ function updateCountry() {
   select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
 }
 
-// var Audio = "Gong.wav";
-var exampleAudio =  "audio_long16.wav";
-// "M1F1-Alaw-AFsp.wav"; 
-// var exampleAudio = "single_user_demo_mono_16kHz.pcm";
-
 var create_email = false;
 var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
-var local_stream;
 var context = 0;
 var mediaStreamDestination = 0;
 var voiceSoundBuffer = 0;
 var voiceSound = 0;
-var start_img = document.getElementById('start_img');
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
-  // TODO(xians): Figure out if changing the audio constraints can help.
-  //getUserMedia({audio:true, video:true}, gotStream, function() {});
   context = new AudioContext();
   mediaStreamDestination = context.createMediaStreamDestination();
-   console.info("load audio buffer start")
-  loadAudioBuffer_( exampleAudio , function(voiceSoundBuffer) { 
-
+  loadAudioBuffer('audio_long16.wav', function(voiceSoundBuffer) {
     voiceSound = context.createBufferSource();
     voiceSound.buffer = voiceSoundBuffer;
+    voiceSound.connect(context.destination);
     voiceSound.connect(mediaStreamDestination);
-    console.log(voiceSound);
     voiceSound.start(0);
-    gotStream(mediaStreamDestination.stream);
   });
 
   start_button.style.display = 'inline-block';
@@ -394,56 +375,21 @@ if (!('webkitSpeechRecognition' in window)) {
   };
 }
 
-function gotStream(stream) {
-  trace("Received local stream");
-  // Call the polyfill wrapper to attach the media stream to this element.
-  attachMediaStream(audio_track_el, stream);
-  local_stream = stream;
-}
+function loadAudioBuffer(url, callback) {
+trace("load audio buffer");
+  var request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
 
-
-function loadAudioBuffer_(url, callback) {
-
-
-
-  trace("load audio buffer");
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.responseType = 'arraybuffer';
-
-  xhr.onload = function() {
-    trace("onload "); 
-    console.log( typeof xhr.response );
-   
-    if ( xhr.status != 200 )
-    {
-      console.error("Got invalid status ", xhr.status );
-      return;
-    }
-
-    console.log("type and size of response:",typeof xhr.response, xhr.response.byteLength , xhr.response  );
-
-
-    var arrayBuffer = xhr.response;
-
-    // array buffer to audio buffer conversion
-    context.decodeAudioData( arrayBuffer , function( audioBuffer ){
-      callback( audioBuffer );
+  request.onload = function(oEvent) {
+  trace("onload ");
+    context.decodeAudioData(request.response, function (decodedAudio) {
+      trace("decode audio data");
+      voiceSoundBuffer = decodedAudio;
+      callback(voiceSoundBuffer);
     });
-
-    /*
-    audioBuffer = context.createBuffer( arrayBuffer , true , 16000 );
-    trace("decode audio data");
-    console.log("Got audio buffer", audioBuffer );
-    callback( audioBuffer );
-
-    */
-
-
   }
-
-  xhr.send();
-
+  request.send(null);
 }
 
 function upgrade() {
@@ -503,7 +449,7 @@ function startButton(event) {
   final_transcript = '';
   recognition.lang = select_dialect.value;
   audio_tracks = mediaStreamDestination.stream.getAudioTracks();
-  console.log("start",audio_tracks);
+
   recognition.connect(audio_tracks[0]);
   recognition.start();
   ignore_onend = false;
