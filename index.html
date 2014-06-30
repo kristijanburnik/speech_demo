@@ -114,7 +114,6 @@
             <a href="https://support.google.com/chrome/bin/answer.py?hl=en&answer=1407892">
             microphone settings</a> are configured correctly.
           </p>
-          {{sr.isUserMediaDecided()}} {{sr._isUserMediaDecided}}
           <p ng-show="sr.isUserMediaRequested() && !sr.isUserMediaDecided()" id="info_allow" class="alert alert-warning" >
             <strong>NOTE!</strong> Click the "Allow" button above to enable your microphone.
           </p>
@@ -132,7 +131,10 @@
         
       </div>
       <!-- /MESSAGES  -->
-
+      
+      
+      <!-- AUDIO BAR  -->
+  
       <!-- DEMO sticker  -->
       <div class="pull-right">
         <span class="label label-danger">DEMO</span>
@@ -146,8 +148,25 @@
         </button> Media Stream Audio Track with Web Speech
       </p>
       
-      <!-- Main View placholder -->
-      <div ng-view></div>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Main View placholder -->
+          <div ng-view></div>
+        </div>
+      </div>  
+      <div class="row">        
+        <div class="col-md-12">
+          <h1>Generated output</h1>
+          Interim:<br>
+          <textarea class="form-control" rows="5">{{transcript.interim}}</textarea>
+          
+          <br>
+          Final:<br>
+          <textarea class="form-control" rows="5">{{transcript.final}}</textarea>
+          
+        </div>
+      </div>
 
     </div>
 
@@ -156,6 +175,7 @@
         WebRTC :-)
       </div>
     </footer>
+
 
 
 

@@ -1,5 +1,67 @@
 app
 
+.service('AudioAnalyzer',function( $rootScope ){
+  var t = {
+    data:[],
+    analyserNode:null,
+    updateAnalysers:function(time) {
+
+      // analyzer draw code here
+      var canvasWidth = 1000;
+      var SPACING = 3;
+      var BAR_WIDTH = 1;
+      var numBars = Math.round( canvasWidth / SPACING );
+      var freqByteData = new Uint8Array( t.analyserNode.frequencyBinCount );
+
+      t.analyserNode.getByteFrequencyData(freqByteData); 
+
+      var multiplier = t.analyserNode.frequencyBinCount / numBars;
+
+      // Draw rectangle for each frequency bin.
+      for (var i = 0; i < numBars; ++i) {
+          var magnitude = 0;
+          var offset = Math.floor( i * multiplier );
+          // gotta sum/average the block, or we miss narrow-bandwidth spikes
+          for (var j = 0; j< multiplier; j++)
+              magnitude += freqByteData[offset + j];
+          magnitude = magnitude / multiplier;
+          t.data[i] = magnitude;
+      }
+      
+      // console.log( "input", t.data );
+      
+      
+      $rootScope.$digest();
+      
+    },
+  
+    attachStream:function( stream ){
+    
+      var audioContext = new AudioContext();
+      var inputPoint = audioContext.createGain();      
+      var realAudioInput = audioContext.createMediaStreamSource( stream );
+      realAudioInput.connect(inputPoint);
+
+    //    audioInput = convertToMono( input );
+
+      t.analyserNode = audioContext.createAnalyser();
+      t.analyserNode.fftSize = 2048;
+      inputPoint.connect( t.analyserNode );
+
+      var zeroGain = audioContext.createGain();
+      zeroGain.gain.value = 0.0;
+      inputPoint.connect( zeroGain );
+      zeroGain.connect( audioContext.destination );
+      setInterval ( t.updateAnalysers , 100 );
+        
+      
+    }
+  };
+  
+  
+  return t;
+})
+
 .service('SpeechRecognition',function(){
 
   var t = {
@@ -58,6 +120,8 @@ app
         return false;      
       }
       
+      console.info("SR event", eventName, event );
+      
       var listeners = t._callbacks[ eventName ];
       
       for ( var i in listeners )
@@ -66,14 +130,27 @@ app
       return true;
     },
     
-    // init the service
     
+    
+    debug:function(){
+    
+      // attach all SR events to console output for debugging
+       for ( var i in t._exposedEvents )
+        t.on( t._exposedEvents[i] , function(e){} );
+        
+    },
+    // init the service
+        
     init:function(){
       t._recognition = new webkitSpeechRecognition();
       t._isAvailable = ( 'webkitSpeechRecognition' in window );
       
+      
+      t.debug();
+      
+      
       t
-        .onError(function(event){
+        .on('error',function(event){
         
             if (event.error == 'no-speech') {
               t._isSpeechDetected = false;
@@ -88,21 +165,22 @@ app
             }
             
         })      
-        .onStart(function(event){
+        .on('start',function(event){
           t._isSpeechDetected = true;
           t._startTimestamp = event.timeStamp;
           console.info("On start");        
           t._isActive = true;
         })
-        .onEnd(function(event){
+        .on('end',function(event){
           t._isActive = false;
           console.info("On end");
         })
-        .onResult(function(event){
+        .on('result',function(event){
+          console.log("onResult event occured!");
           if (typeof(event.results) == 'undefined') {
             t._recognition.onend = null; // TODO: deregister?
-            t.stop();
-            upgrade();
+            console.log("Got undefined result from SR");
+            t.stop();          
             return;
           }
           
@@ -127,6 +205,7 @@ app
     
     setAudioTrack:function( audioTrack ){      
       t._config.audioTrack = audioTrack;
+      console.log( "Audio track is set", audioTrack );
       return t;
     },
     
@@ -176,27 +255,71 @@ app
     
     },
     
+    _checkMediaStream:function(){
+      if (t._mediaStream == null)
+        throw "Media stream is not set!\nCheck if user media was requested and allowed!"
+        
+    },
     
     streamMicrophone:function(){
-      // var context = new AudioContext();
-      // var mediaStreamDestination = context.createMediaStreamDestination();  
-      
-      if ( t._mediaStream == null )
-      {
-      
-        console.error("Media stream is not set!\nCheck if user media was requested and allowed!");
-        return t;
-      }
+
+      t._checkMediaStream();
       
       var audioTracks = t._mediaStream.getAudioTracks();
-            
-      // TODO: check if track is available
+
       t.setAudioTrack( audioTracks[0] );
-      
-      console.log("Audio track is set", audioTracks[0]);
      
       return t;
+    },
+    
+    // todo: place up
+    _mediaStreamDestination:null,
+    
+    _loadAudioBuffer:function(url, context , callback) {
+      trace("load audio buffer");
+      var request = new XMLHttpRequest();
+      request.open('GET', url, true);
+      request.responseType = 'arraybuffer';
 
+      request.onload = function(oEvent) {
+        trace("onload");
+        context.decodeAudioData(request.response, function (decodedAudio) {
+          trace("decode audio data");
+          callback( decodedAudio );
+        });
+      }
+      request.send(null);
+    },
+    
+    streamAudioFile:function( url ){
+    
+        var context = new AudioContext();
+        t._mediaStreamDestination = context.createMediaStreamDestination();
+        t._loadAudioBuffer( url , context , function(voiceSoundBuffer) {
+          var voiceSound = context.createBufferSource();
+          voiceSound.buffer = voiceSoundBuffer;
+          
+          // TODO: find out why connected twice ?
+          voiceSound.connect( context.destination );
+          voiceSound.connect( t._mediaStreamDestination );
+          
+          console.log( context.destination, t._mediaStreamDestination  );
+          voiceSound.start( 0 );
+          
+          var audioTracks = t._mediaStreamDestination.stream.getAudioTracks();
+          
+          t.setAudioTrack( audioTracks[0] );
+          
+          console.warn("automatic start from SpeechRecognition.streamAudioFile");
+          t.start();
+        });
+        
+        return t;
+    
+    },
+    
+    getStream:function(){
+      return t._mediaStream;
     },
     
     // starting the recognition
@@ -261,22 +384,18 @@ app
     },
 
     // event chains
+    _exposedEvents:[ 'error' , 'start' , 'end' , 'result' , 'nomatch' , 'audiostart' , 'audioend' , 'soundstart' , 'soundend' ],
     
-    onError:function( callback ){
-      return t._registerCallback( 'onerror' , callback );
-    },
+    on:function( eventName , callback ) {
     
-    onStart:function( callback ){
-      return t._registerCallback( 'onstart' , callback );
-    },
-    
-    onEnd:function( callback ){
-      return t._registerCallback( 'onend' , callback );
-    },
-    
-    onResult:function( callback ){
-      return t._registerCallback( 'onresult' , callback );
-    },    
+      eventName = eventName.toLowerCase();
+      
+      if ( t._exposedEvents.indexOf( eventName ) < 0 )
+        throw "Unknown SpeechRecognition event '" + eventName + "'";
+      
+      var fullEventName = 'on' + eventName;      
+      return t._registerCallback( fullEventName , callback );
+    }
  
     
   }
