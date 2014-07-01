@@ -15,9 +15,10 @@ app
 })
 
 
-.controller("MainController",function( Menu , $rootScope, DemoSpeechRecognition ){
+.controller("MainController",function( Menu , $rootScope, SpeechRecognition ){
 
   $rootScope.menu = Menu;
+  $rootScope.sr = SpeechRecognition.init();
   
 })
 

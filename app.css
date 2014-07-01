@@ -4,6 +4,8 @@ body {
 
 }
 
+.ng-cloak { display:none; }
+
 
 header {
   margin-bottom:50px;
@@ -33,7 +35,11 @@ footer .container {
 
 
 #main {
-  margin-top:100px;
+  margin-top:50px;
   margin-bottom:50px;
   min-height:800px;
+}
+
+#analyzer {
+  height:200px;
 }

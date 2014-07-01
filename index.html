@@ -63,8 +63,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
 	        <ul class="nav navbar-nav">
-	          <li ng-class="{'active':menu.section=='microphone'}"><a href="#microphone"><i class="fa fa-microphone fa-align-left"></i> Via microphone</a></li>
-            <li ng-class="{'active':menu.section=='recorded'}"><a href="#recorded"><i class="fa fa-file-audio-o fa-align-left"></i> Via recorded audio</a></li>
+	          <li ng-class="{'active':menu.section=='microphone'}"><a href="?x=mic#microphone"><i class="fa fa-microphone fa-align-left"></i> Via microphone</a></li>
+            <li ng-class="{'active':menu.section=='recorded'}"><a href="?x=rec#recorded"><i class="fa fa-file-audio-o fa-align-left"></i> Via recorded audio</a></li>
 	        </ul>			
 	      </div><!-- /.navbar-collapse -->
       </nav>
@@ -78,8 +78,19 @@
     <!-- MAIN -->
     <div id="main" class="container" ng-controller="MainController">   
 
-      <!-- MESSAGES  -->    
-      <div id="message">
+      <!-- DEMO sticker  -->
+      <div class="pull-right">
+        <span class="label label-danger">DEMO</span>
+      </div>
+
+      <!-- Section title ( demo type )  -->
+      <div class="ng-cloak">
+        <h1 ng-show="menu.section=='microphone'" ><i class="fa fa-microphone"></i> SR via Microphone</h1>
+        <h1 ng-show="menu.section=='recorded'"><i class="fa fa-file-audio-o"></i> SR via Audio File</h1>
+      </div>
+
+      <!-- MESSAGES  -->
+      <div id="message" class="ng-cloak">
   
         <!-- SPEECH RECOGNITION AVAILABILITY  -->    
         <p ng-hide="sr.isAvailable()" class="alert alert-danger"> 
@@ -124,11 +135,6 @@
         
       </div>
       <!-- /MESSAGES  -->
-      
-      <!-- DEMO sticker  -->
-      <div class="pull-right">
-        <span class="label label-danger">DEMO</span>
-      </div>
 
       <div class="row">
         <div class="col-md-12">
@@ -143,7 +149,7 @@
       </div>  
       <div class="row">        
         <div class="col-md-12">
-          <h1>Generated output</h1>
+          <h2>Recognition results</h2>
           Interim:<br>
           <textarea class="form-control" rows="5">{{transcript.interim}}</textarea>
           
@@ -191,7 +197,11 @@
       <script src="ngapp/demo.service.js"></script>
       <script src="ngapp/controller.js"></script>
 
-  
+      <script>
+        $(function(){
+          $(".ng-cloak").show();
+        });
+      </script>
   
 
 

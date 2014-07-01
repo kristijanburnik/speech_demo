@@ -84,7 +84,7 @@ app
     init:function(){
       var margin = {top: 20, right: 20, bottom: 30, left: 50},
           width = 1000 - margin.left - margin.right,
-          height = 300 - margin.top - margin.bottom
+          height = 200 - margin.top - margin.bottom
           ;
 
       t.lineUp = d3.svg.line()
