@@ -1,6 +1,6 @@
 app
 
-.service("DemoSpeechRecognition",function( $rootScope , SpeechRecognition , AudioAnalyzer ){
+.service("DemoSpeechRecognition",function( $rootScope , SpeechRecognition , AudioAnalyzer , Visualizer ){
 
   return function() {
 
@@ -20,11 +20,21 @@ app
           $rootScope.$digest();
       })
       .on('start',function(){
-        AudioAnalyzer.attachStream( SpeechRecognition.getStream()  );      
+      
+         Visualizer.init();
+        
+         AudioAnalyzer
+          .attachStream( SpeechRecognition.getStream() )
+          .onUpdate(function( data ){     
+              Visualizer.update( data );
+          })
+         ;
+         
       })
       .on('end',function(){
       })
       .on('result',function(event){
+        
         var interim_transcript = '';
         if (typeof(event.results) == 'undefined') {
           // recognition.onend = null;

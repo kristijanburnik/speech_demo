@@ -3,6 +3,13 @@ app
 
 .service('SpeechRecognition',function(){
 
+  // error for browsers not yet supporting
+  if ( webkitSpeechRecognition && ! (webkitSpeechRecognition.prototype.connect) )
+    webkitSpeechRecognition.prototype.connect = function( audioTrack )
+    {
+        window.alert("webkitSpeechRecognition.connect method is not supported in this browser");
+    }
+    
   var t = {
   
     _recognition:null, // webkitSpeechRecognition object ref.    
@@ -21,7 +28,7 @@ app
     _onInvalidateCallback:function(){},
     
     _invalidate:function(){
-      console.log("Invalidation ...");
+      // console.log("Invalidation ...");
       t._onInvalidateCallback();
     },
     
@@ -55,11 +62,11 @@ app
     
       if ( ! ( eventName in t._callbacks ) )
       {
-        console.info("Missing callback for event name" , eventName );      
+        // console.info("Missing callback for event name" , eventName );      
         return false;      
       }
       
-      console.info("SR event", eventName, event );
+      // console.info("SR event", eventName, event );
       
       var listeners = t._callbacks[ eventName ];
       
@@ -74,11 +81,25 @@ app
       if (t._mediaStream == null)
         throw "Media stream is not set!\nCheck if user media was requested and allowed!"        
     },  
-    _debug:function(){    
-       // attach all SR events to console output for debugging
-      for ( var i in t._exposedEvents )
-        t.on( t._exposedEvents[i] , function(e){} );        
+    
+    _mediaStreamDestination:null,
+    
+    _loadAudioBuffer:function(url, context , callback) {
+      trace("load audio buffer");
+      var request = new XMLHttpRequest();
+      request.open('GET', url, true);
+      request.responseType = 'arraybuffer';
+
+      request.onload = function(oEvent) {
+        trace("onload");
+        context.decodeAudioData(request.response, function (decodedAudio) {
+          trace("decode audio data");
+          callback( decodedAudio );
+        });
+      }
+      request.send(null);
     },
+
     
     // init the service        
     init:function(){
@@ -88,8 +109,6 @@ app
       t._isAvailable = ( 'webkitSpeechRecognition' in window );
       
       t._recognition = new webkitSpeechRecognition();
-      
-      t._debug();
       
       t
         .on('error',function(event){
@@ -113,7 +132,7 @@ app
         .on('result',function(event){
           if (typeof(event.results) == 'undefined') {
             t._recognition.onend = null; // TODO: deregister?
-            console.error("Got undefined result from SR");
+            // console.error("Got undefined result from SR");
             t.stop();
             return;
           }
@@ -136,7 +155,7 @@ app
     },    
     setAudioTrack:function( audioTrack ){      
       t._audioTrack = audioTrack;
-      console.log( "Audio track is set", audioTrack );
+      // console.log( "Audio track is set", audioTrack );
       return t;
     },    
     getAudioTrack:function() {
@@ -181,38 +200,19 @@ app
       
         if ( !allowed )
         {
-          console.info("User disallowed microphone usage");
+          // console.info("User disallowed microphone usage");
           return;
         }
         
         var audioTracks = t._mediaStream.getAudioTracks();
 
         t.setAudioTrack( audioTracks[0] );
-        console.warn("automatic start from SpeechRecognition.streamMicrophone");
+        // console.warn("automatic start from SpeechRecognition.streamMicrophone");
         t.start();
       
       });
      
       return t;
-    },
-    
-    // todo: place up
-    _mediaStreamDestination:null,
-    
-    _loadAudioBuffer:function(url, context , callback) {
-      trace("load audio buffer");
-      var request = new XMLHttpRequest();
-      request.open('GET', url, true);
-      request.responseType = 'arraybuffer';
-
-      request.onload = function(oEvent) {
-        trace("onload");
-        context.decodeAudioData(request.response, function (decodedAudio) {
-          trace("decode audio data");
-          callback( decodedAudio );
-        });
-      }
-      request.send(null);
     },
     
     streamAudioFile:function( url ){
@@ -227,7 +227,7 @@ app
           voiceSound.connect( context.destination );
           voiceSound.connect( t._mediaStreamDestination );
           
-          console.log( context.destination, t._mediaStreamDestination  );
+          // console.log( context.destination, t._mediaStreamDestination  );
           voiceSound.start( 0 );
           
           // set the media stream
@@ -237,7 +237,7 @@ app
           
           t.setAudioTrack( audioTracks[0] );
           
-          console.warn("automatic start from SpeechRecognition.streamAudioFile");
+          // console.warn("automatic start from SpeechRecognition.streamAudioFile");
           t.start();
         });
         
@@ -254,7 +254,7 @@ app
     
       if ( ! t._audioTrack  )
       {
-        console.error("No audio track was set!\nUse .setAudioTrack() before .start()");
+        // console.error("No audio track was set!\nUse .setAudioTrack() before .start()");
         return false;
       }
       

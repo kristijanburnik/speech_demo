@@ -69,11 +69,11 @@
 	      </div><!-- /.navbar-collapse -->
       </nav>
 
-      <div class="container center-text">
+      <div class="container center-text">        
         <h3>Speech <i class="fa fa-arrow-right"></i> Text</h3>
       </div>
     </header>
-
+    
 
     <!-- MAIN -->
     <div id="main" class="container" ng-controller="MainController">   
@@ -86,11 +86,7 @@
           Web Speech API is not supported by this browser. 
           Upgrade to <a href="https://www.google.com/chrome">Chrome</a> version 25 or later.
         </p>
-        <p ng-show="sr.isAvailable()" class="alert alert-success alert-dismissable" >
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <i class="fa fa-check"></i> Speech recognition is supported in this browser :-)
-        </p>
-
+       
         <p ng-show="sr.isActive()" class="alert alert-info" >
           Speech recognition is active.
         </p>
@@ -129,19 +125,18 @@
       </div>
       <!-- /MESSAGES  -->
       
-      
-      <!-- AUDIO BAR  -->
-  
       <!-- DEMO sticker  -->
       <div class="pull-right">
         <span class="label label-danger">DEMO</span>
       </div>
-  
 
-      <!--TODO -->
-      
       <div class="row">
         <div class="col-md-12">
+          
+          
+          <!-- Analyzer -->
+          <div ng-include="src='ngapp/view/audio.analyzer.ngview.html'"></div>
+          
           <!-- Main View placholder -->
           <div ng-view></div>
         </div>
@@ -160,14 +155,18 @@
       </div>
 
     </div>
+    
+        
+    
+
 
     <footer>
       <div class="container">
-        WebRTC :-)
+        Google WebRTC team
       </div>
     </footer>
 
-
+   
     <!-- SUPPORTING SCRIPTS -->
 
       <!-- jQuery -->
@@ -180,6 +179,9 @@
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
       <script src="https://code.angularjs.org/1.2.18/angular-route.min.js"></script>
 
+      <!-- D3.js -->
+      <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+      <script src="http://d3js.org/d3.hexbin.v0.min.js"></script>
 
     <!-- NG APP -->
 
