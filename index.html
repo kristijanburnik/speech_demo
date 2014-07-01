@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="SpeechRecognitionDemo" class="js consumer chrome">
   <head>
-
-
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+    <meta content="Google Chrome is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier." name="description">
+    
   <!-- Legacy -->
-    <script type="text/javascript" src="./adapter.js"></script>
-    <script type="text/javascript" async="" src="./speech_files/ga.js"></script><script>
+
+    <script>
     (function(e, p){
     var m = location.href.match(/platform=(win8|win|mac|linux|cros)/);
     e.id = (m && m[1]) ||
@@ -13,26 +17,19 @@
     e.className = e.className.replace(/\bno-js\b/,'js');
     })(document.documentElement, window.navigator.userAgent)
     </script>
-    <meta charset="utf-8">
-    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
-    <meta content="Google Chrome is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier." name="description">
 
-    <link href="https://plus.google.com/100585555255542998765" rel="publisher">
     <link href="https://www.google.com/images/icons/product/chrome-32.png" rel="icon" type="image/ico">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=latin" rel="stylesheet">
     <link href="https://www.google.com/intl/en/chrome/assets/common/css/chrome.min.css" rel="stylesheet">
-    <script src="./speech_files/autotrack.js"></script>
-    <script>
-      // TODO!
-      // new gweb.analytics.AutoTrack({profile: 'UA-26908291-1'});
-    </script>
-    <script src="./speech_files/chrome.min.js"></script>
 
   <!-- /Legacy -->
 
 
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- WebRTC adapter  -->
+    <script type="text/javascript" src="./adapter.js"></script>
+    
+    <script src="./speech_files/autotrack.js"></script>
+    <script src="./speech_files/chrome.min.js"></script>
 
     <!-- Bootstrap CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" >
@@ -95,7 +92,7 @@
         </p>
 
         <p ng-show="sr.isActive()" class="alert alert-info" >
-          Speak now.
+          Speech recognition is active.
         </p>
         
         
@@ -142,12 +139,6 @@
   
 
       <!--TODO -->
-      <p id="info_start" ng-show="sr.isUserMediaAllowed()">
-        <button ng-click="sr.start()" ng-disabled="sr.isActive()"  class="btn btn-lg btn-primary" style="display: inline-block;">
-           <i class="fa fa-microphone"></i> Start recognition 
-        </button> Media Stream Audio Track with Web Speech
-      </p>
-      
       
       <div class="row">
         <div class="col-md-12">
@@ -177,9 +168,6 @@
     </footer>
 
 
-
-
-
     <!-- SUPPORTING SCRIPTS -->
 
       <!-- jQuery -->
@@ -197,6 +185,8 @@
 
       <script src="ngapp/app.js"></script>
       <script src="ngapp/service.js"></script>
+      <script src="ngapp/audio.analyzer.service.js"></script>
+      <script src="ngapp/demo.service.js"></script>
       <script src="ngapp/controller.js"></script>
 
   
