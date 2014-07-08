@@ -166,8 +166,8 @@ app
     
       if ( callback )
         t._onUserMediaDecidedCallback = callback;    
-    
-      var constraints = { audio: { mandatory: { echoCancellation: false }}}
+
+      var constraints = { audio: { optional: [{ echoCancellation: false }] } };
       getUserMedia(
         constraints, 
         function( stream ){          
