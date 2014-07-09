@@ -19,10 +19,14 @@ Running test for a single item:
   ./sr-test.sh rb-$num
   ./parse-results.py rb-$num
   echo $(date) -- $(./average-score.sh) >> score.history.txt
+  for x in $(seq 18 $num); do ./parse-results.py rb-$x; done > results.details.txt
   git add .
   git commit -m "Added test rb-$num"
   git push origin master
   
 
 $num is the test number --> see in raw/
+
+
+
 
