@@ -1,3 +1,5 @@
+NOTE!
+  The speech-config.sh file is missing intentionally because it contains sensitive data
 
 Test Structure
   - raw/prefix.raw --> raw audio file
