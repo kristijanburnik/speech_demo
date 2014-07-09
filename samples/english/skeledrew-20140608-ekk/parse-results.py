@@ -10,7 +10,7 @@ def compare( expected , actual ):
   return sm.ratio()
 
 
-def parse_result( output_file , txt_file , result_file ):
+def parse_result( output_file , txt_file ):
   lines = [line.strip() for line in open(output_file)]
   expected = [line.strip() for line in open( txt_file )][0]
   results = []
@@ -18,10 +18,12 @@ def parse_result( output_file , txt_file , result_file ):
     obj = json.loads(line)
     for alt in obj['result']:    
       for item in alt['alternative']:
+        res = compare( expected , item['transcript'] )
+        results.append( res )
         print "exp: ", expected
         print "act: ", item['transcript']
+        print res
         print
-        results.append( compare( expected , item['transcript'] ) )
   return results
 
 prefix = sys.argv[1]
@@ -32,7 +34,7 @@ result_file = "results/" + prefix + ".txt"
 
 fp = open( result_file , "w" )
 
-res = parse_result( output_file , txt_file , result_file  )
+res = parse_result( output_file , txt_file )
 for ratio in res:
   print >> fp , ratio
 
