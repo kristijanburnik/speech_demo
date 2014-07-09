@@ -12,17 +12,17 @@ Adding new tests:
   - export audio to a raw format and save it as raw/rb-$num.raw
   - create meta file meta/rb-$num.meta and put following bash assignment:
       rate=$sample_rate
-    where $sample_rate can be 16000, ... ,48000
-  - create text file txt/rb-$num.txt and write the actual sentence, only lowercase words
+    where $sample_rate can be 16000 , ... , 48000
+  - create text file txt/rb-$num.txt and write the expected sentence, only lowercase words
 
 Running test for a single item:
   ./sr-test.sh rb-$num
-  ./parse-results.sh rb-$num
+  ./parse-results.py rb-$num
   echo $(date) -- $(./average-score.sh) >> score.history.txt
   git add .
   git commit -m "Added test rb-$num"
   git push origin master
   
 
-$num is the test number :: current max $num is 27 --> see in raw/
+$num is the test number --> see in raw/
 
