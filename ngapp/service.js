@@ -35,7 +35,7 @@ app
     // config for the webkitSpeechRecognition object
     _config: {
       lang:'en-US',
-      continuous:true,
+      continuous:false,
       interimResults:true,
     },
     _audioTrack:null,    

@@ -14,5 +14,5 @@ meta_file="meta/$prefix.meta"
 
 [ ! -d "out" ] && mkdir "out"
 
-speech-nonstreaming-test $input_file $meta_file > $output_file
+./speech-nonstreaming-test.sh $input_file $meta_file > $output_file
 

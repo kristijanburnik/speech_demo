@@ -103,10 +103,10 @@
         </p>
         
         
-         <p ng-show="sr.isUserMediaDecided() && !sr.isUserMediaAllowed()" id="info_blocked" class="alert alert-danger" >
-            Permission to use microphone is blocked. To change, go to
-            <a href="chrome://settings/contentExceptions#media-stream" target="_blank">chrome://settings/contentExceptions#media-stream</a>
-          </p>
+        <p ng-show="sr.isUserMediaDecided() && !sr.isUserMediaAllowed()" id="info_blocked" class="alert alert-danger" >
+          Permission to use microphone is blocked. To change, go to
+          <a href="chrome://settings/contentExceptions#media-stream" target="_blank">chrome://settings/contentExceptions#media-stream</a>
+        </p>
         
         <div ng-hide="sr.isActive()">
           <p ng-hide="sr.isSpeechDetected()" id="info_no_speech" class="alert alert-warning">
@@ -137,18 +137,14 @@
       <!-- /MESSAGES  -->
 
       <div class="row">
-        <div class="col-md-12">
-          
-          
+        <div class="col-md-12">          
           <!-- Analyzer -->
           <div ng-include="src='ngapp/view/audio.analyzer.ngview.html'"></div>
           
           <!-- Main View placholder -->
           <div ng-view></div>
-        </div>
-      </div>  
-      <div class="row">        
-        <div class="col-md-12">
+
+
           <h2>Recognition results</h2>
           Interim:<br>
           <textarea class="form-control" rows="5">{{transcript.interim}}</textarea>
@@ -162,16 +158,11 @@
 
     </div>
     
-        
-    
-
-
     <footer>
       <div class="container">
         Google WebRTC team
       </div>
     </footer>
-
    
     <!-- SUPPORTING SCRIPTS -->
 
@@ -189,21 +180,15 @@
       <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
       <script src="http://d3js.org/d3.hexbin.v0.min.js"></script>
 
-    <!-- NG APP -->
-
+      <!-- NG APP -->
       <script src="ngapp/app.js"></script>
       <script src="ngapp/service.js"></script>
       <script src="ngapp/audio.analyzer.service.js"></script>
       <script src="ngapp/demo.service.js"></script>
       <script src="ngapp/controller.js"></script>
 
-      <script>
-        $(function(){
-          $(".ng-cloak").show();
-        });
-      </script>
-  
-
+      <!-- decloacking : since NG is failing to do so?  -->
+      <script> $(function(){ $(".ng-cloak").show(); }); </script>
 
   </body>
 </html>
