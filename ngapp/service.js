@@ -42,7 +42,7 @@ app
     _exposedEvents:[ 'error' , 'start' , 'end' , 'result' , 'nomatch' , 'audiostart' , 'audioend' , 'soundstart' , 'soundend' ],
         
     // callback handling
-    
+        
     _registerCallback:function( eventName , callback ){
     
       if ( ! ( eventName in t._callbacks ) )
@@ -66,7 +66,7 @@ app
         return false;      
       }
       
-      console.info("SR event", eventName, event );
+      // console.info("SR event", eventName, event );
       
       var listeners = t._callbacks[ eventName ];
       
@@ -103,6 +103,8 @@ app
     
     // init the service        
     init:function(){
+    
+      console.log("init, creating new webkitSpeechRecognition");
     
       t._callbacks = {};
       

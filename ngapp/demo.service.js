@@ -3,7 +3,9 @@ app
 .service("DemoSpeechRecognition",function( $rootScope , SpeechRecognition , AudioAnalyzer , Visualizer ){
 
   return function() {
+  
 
+  
     $rootScope.sr = SpeechRecognition;
 
     $rootScope.transcript = {

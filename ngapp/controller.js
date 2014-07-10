@@ -15,7 +15,7 @@ app
 })
 
 
-.controller("MainController",function( Menu , $rootScope, SpeechRecognition ){
+.controller("MainController",function( Menu , $rootScope, SpeechRecognition  ){
 
   $rootScope.menu = Menu;
   $rootScope.sr = SpeechRecognition.init();
@@ -29,12 +29,26 @@ app
   
 })
 
-.controller("RecordedController",function( Menu , $rootScope, DemoSpeechRecognition ){
+.controller("RecordedController",function( Menu , $scope , $rootScope, DemoSpeechRecognition , $http ){
 
   Menu.set('recorded');
-  var url = "audio_long16.wav";     
-  DemoSpeechRecognition().streamAudioFile( url );
 
+  $scope.currentSample = null;
+  $scope.selectSample = function( sample ){
+     $scope.currentSample = sample;
+  }
+  
+  $scope.startRecognition = function ( sample ) {
+    DemoSpeechRecognition().streamAudioFile( sample.filename );
+  }
+
+  $http.get('samples.json')
+    .then(function(res) {
+      $scope.samples = res.data
+    })
+
+  
+  
 });
 
 
