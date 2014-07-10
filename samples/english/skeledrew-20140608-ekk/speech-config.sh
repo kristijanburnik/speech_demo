@@ -3,7 +3,7 @@
 if [ "$SR_API_KEY" == "" ]; then
   echo "Missing SR_API_KEY env variable!"  1>&2
   echo "enter api key here: "
-  read $SR_API_KEY
+  read SR_API_KEY
   export SR_API_KEY
   if [ $(cat ~/.bashrc | grep "SR_API_KEY" | wc -l) -eq 0  ]; then
     echo "Append it to ~/.bashrc? (y/n) [n]: "
