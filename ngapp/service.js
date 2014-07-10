@@ -219,8 +219,7 @@ app
     },
     
     _audioContext:null,
-    _mediaStreamDestination:null,
-    
+   
     getAudioContext:function(){
       if ( ! t._audioContext  )
           t._audioContext = new AudioContext();
@@ -228,6 +227,7 @@ app
       return t._audioContext;
     },
     
+     _mediaStreamDestination:null,
     getMediaStreamDestination:function(){      
       if ( ! t._mediaStreamDestination )  
         t._mediaStreamDestination = t.getAudioContext().createMediaStreamDestination();

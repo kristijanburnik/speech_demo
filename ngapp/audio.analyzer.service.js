@@ -30,17 +30,25 @@ app
           t.data[i] = { range: i , value: magnitude };
           
       }
-      
     
        t._updateCallback( t.data );
       
+    },
+    
+    _audioContext:null,
+   
+    getAudioContext:function(){
+      if ( ! t._audioContext  )
+          t._audioContext = new AudioContext();
+      
+      return t._audioContext;
     },
   
     attachStream:function( stream ){
     
       console.log("AudioAnalyzer attached stream" , stream );
     
-      var audioContext = new AudioContext();
+      var audioContext = t.getAudioContext();
       var inputPoint = audioContext.createGain();      
       var realAudioInput = audioContext.createMediaStreamSource( stream );
       realAudioInput.connect(inputPoint);
