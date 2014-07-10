@@ -35,7 +35,7 @@ app
     // config for the webkitSpeechRecognition object
     _config: {
       lang:'en-US',
-      continuous:false,
+      continuous:true,
       interimResults:true,
     },
     _audioTrack:null,    
@@ -66,7 +66,7 @@ app
         return false;      
       }
       
-      // console.info("SR event", eventName, event );
+      console.info("SR event", eventName, event );
       
       var listeners = t._callbacks[ eventName ];
       
@@ -132,7 +132,7 @@ app
         .on('result',function(event){
           if (typeof(event.results) == 'undefined') {
             t._recognition.onend = null; // TODO: deregister?
-            // console.error("Got undefined result from SR");
+            console.error("Got undefined result from SR");
             t.stop();
             return;
           }
