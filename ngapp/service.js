@@ -218,10 +218,28 @@ app
       return t;
     },
     
+    _audioContext:null,
+    _mediaStreamDestination:null,
+    
+    getAudioContext:function(){
+      if ( ! t._audioContext  )
+          t._audioContext = new AudioContext();
+      
+      return t._audioContext;
+    },
+    
+    getMediaStreamDestination:function(){      
+      if ( ! t._mediaStreamDestination )  
+        t._mediaStreamDestination = t.getAudioContext().createMediaStreamDestination();
+        
+      return t._mediaStreamDestination;
+      
+    },
+    
     streamAudioFile:function( url ){
     
-        var context = new AudioContext();
-        t._mediaStreamDestination = context.createMediaStreamDestination();
+        var context = t.getAudioContext();
+        t._mediaStreamDestination = t.getMediaStreamDestination();
         t._loadAudioBuffer( url , context , function(voiceSoundBuffer) {
           var voiceSound = context.createBufferSource();
           voiceSound.buffer = voiceSoundBuffer;
