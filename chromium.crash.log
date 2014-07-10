@@ -1,0 +1,39 @@
+Received signal 6
+#0 0x7f15dea13755 base::debug::StackTrace::StackTrace()
+#1 0x7f15dea13081 base::debug::(anonymous namespace)::StackDumpSignalHandler()
+#2 0x7f15cc62dcb0 <unknown>
+#3 0x7f15ca26b425 gsignal
+#4 0x7f15ca26eb8b abort
+#5 0x7f15dea0fdfb base::debug::(anonymous namespace)::DebugBreak()
+#6 0x7f15dea0fe07 base::debug::BreakDebugger()
+#7 0x7f15dea9010a logging::LogMessage::~LogMessage()
+#8 0x7f15d048f9cd content::SpeechRecognitionDispatcher::OnMediaStreamConnected()
+#9 0x7f15d0491a6a DispatchToMethod<>()
+#10 0x7f15d0490c64 SpeechRecognitionMsg_MediaStreamConnected::Dispatch<>()
+#11 0x7f15d048ec8e content::SpeechRecognitionDispatcher::OnMessageReceived()
+#12 0x7f15d041b38c content::RenderViewImpl::OnMessageReceived()
+#13 0x7f15d0245d66 content::MessageRouter::RouteMessage()
+#14 0x7f15d0245d0a content::MessageRouter::OnMessageReceived()
+#15 0x7f15cff1f29a content::ChildThread::OnMessageReceived()
+#16 0x7f15db7f6a1a IPC::ChannelProxy::Context::OnDispatchMessage()
+#17 0x7f15db7fc0b4 base::internal::RunnableAdapter<>::Run()
+#18 0x7f15db7fb6a8 base::internal::InvokeHelper<>::MakeItSo()
+#19 0x7f15db7fa675 base::internal::Invoker<>::Run()
+#20 0x7f15de9ff225 base::Callback<>::Run()
+#21 0x7f15deab0eb4 base::MessageLoop::RunTask()
+#22 0x7f15deab0fd8 base::MessageLoop::DeferOrRunPendingTask()
+#23 0x7f15deab14ff base::MessageLoop::DoWork()
+#24 0x7f15deabfc80 base::MessagePumpDefault::Run()
+#25 0x7f15deab0a03 base::MessageLoop::RunHandler()
+#26 0x7f15deb0754c base::RunLoop::Run()
+#27 0x7f15deab0172 base::MessageLoop::Run()
+#28 0x7f15d0460c8e content::RendererMain()
+#29 0x7f15cf634eb3 content::RunZygote()
+#30 0x7f15cf635109 content::RunNamedProcessTypeMain()
+#31 0x7f15cf6367d9 content::ContentMainRunnerImpl::Run()
+#32 0x7f15cf634579 content::ContentMain()
+#33 0x7f15e1fe28f4 ChromeMain
+#34 0x7f15e1fe289a main
+#35 0x7f15ca25676d __libc_start_main
+#36 0x7f15e1fe27a9 <unknown>
+
