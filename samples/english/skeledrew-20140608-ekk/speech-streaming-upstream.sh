@@ -15,6 +15,7 @@ pair=$3
 
 curl -s \
  --header "Content-Type: $format; rate=$rate" \
+ --header "Transfer-Encoding: chunked" \
  --data-binary @$1 \
  "$STREAMING_API_URL/up?lang=$language&lm=$language_model&client=$client&pair=$pair&key=${key}$additional_params" > /dev/null &
 
