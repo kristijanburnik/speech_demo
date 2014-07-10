@@ -8,7 +8,7 @@ if [ "$SR_API_KEY" == "" ]; then
   if [ $(cat ~/.bashrc | grep "SR_API_KEY" | wc -l) -eq 0  ]; then
     echo "Append it to ~/.bashrc? (y/n) [n]: "
     read ans
-    if [ "${$ans,,}" == "y" ]; then
+    if [ "${ans,,}" == "y" ]; then
       echo "" >> ~/.bashrc
       echo "# SR API KEY" >> ~/.bashrc
       echo "export SR_API_KEY=\"$SR_API_KEY\"" >> ~/.bashrc
