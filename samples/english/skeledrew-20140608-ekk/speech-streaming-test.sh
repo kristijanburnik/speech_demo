@@ -10,19 +10,26 @@ if [ "$2"  != "" ]; then
 	echo "Using additional params: $additional_params" 1>&2
 fi
 
+### DOWNSTREAM ###
+
 echo "DOWNSTREAM connect" 2>&1
-#downstream
 curl -s \
  "$STREAMING_API_URL/down?pair=$pair" > downstream.stt &
 down_pid="$!"
 
+###
+
+
+### UPSTREAM ###
+
 echo "UPSTREAM connect" 2>&1
-# upstream
 curl -s \
  --header "Content-Type: $format; rate=$rate" \
  --data-binary @$1 \
  "$STREAMING_API_URL/up?lang=$language&lm=$language_model&client=$client&pair=$pair&key=${key}$additional_params" > /dev/null &
 up_pid="$!"
+
+###
 
 while true; do
 
