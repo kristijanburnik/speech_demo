@@ -1,0 +1,52 @@
+[
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-18.wav",
+	"title":"Sample 18",
+	"text":"modern computers have far more computing power than hand-held devices"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-19.wav",
+	"title":"Sample 19",
+	"text":"that means that when a programmer wants to write speech recognition software"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-20.wav",
+	"title":"Sample 20",
+	"text":"it is necessary to keep in mind on which hardware the software will run"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-21.wav",
+	"title":"Sample 21",
+	"text":"a full-blown computer offers a programmer the freedom to develop software"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-22.wav",
+	"title":"Sample 22",
+	"text":"that allows the end user to issue a wider array of commands"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-23.wav",
+	"title":"Sample 23",
+	"text":"in practice this will allow end users to issue commands such as go to previous paragraph"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-24.wav",
+	"title":"Sample 24",
+	"text":"go up one paragraph or even i want to edit the previous paragraph"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-25.wav",
+	"title":"Sample 25",
+	"text":"where all these commands might lead to the same result on that powerful pc"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-26.wav",
+	"title":"Sample 26",
+	"text":"the software on a hand-held device might only respond to one specific command"
+},
+{
+	"filename":"samples/english/skeledrew-20140608-ekk/wav/rb-27.wav",
+	"title":"Sample 27",
+	"text":"the same would be the case for other tasks such as browsing the web"
+}
+]

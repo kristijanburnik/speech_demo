@@ -2,12 +2,15 @@
 
 <ul class="nav nav-pills">
   <li ng-repeat="s in samples" ng-class="{'active':currentSample==s}">
-    <a href="javascript:" ng-click="selectSample(s)">{{s.title}}</a>
+    <a href="javascript:void(0)" ng-click="selectSample(s)">{{s.title}}</a>
   </li>
 </ul>
 <div ng-show="currentSample" class="alert alert-info">
-  <button class="btn btn-primary pull-right" ng-click="startRecognition( currentSample )"> Start recognition </button>
+  <button class="btn btn-lg btn-primary pull-right" ng-click="startRecognition( currentSample )"> Start recognition </button>
   Sample text:<br>
   <h4>{{currentSample.text}}</h4>
+</div>
+<div ng-hide="currentSample" class="alert alert-info">
+  Choose a sample above <i class="fa fa-arrow-up"></i>
 </div>
 
