@@ -11,6 +11,9 @@ fi
 source $2
 pair=$3
 
+echo "todo:remove"
+STREAMING_API_URL="http://rtc-speech:8080";
+
 ### UPSTREAM ###
 
 curl -s \

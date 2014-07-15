@@ -18,7 +18,8 @@ fi
 
 
 NONSTREAMING_API_URL="https://www.google.com/speech-api/v2/recognize"
-STREAMING_API_URL="https://www.google.com/speech-api/full-duplex/v1";
+# STREAMING_API_URL="https://www.google.com/speech-api/full-duplex/v1";
+STREAMING_API_URL="http://rtc-speech.eem.corp.google.com/speech-api"
 
 # The API key
 key=$SR_API_KEY

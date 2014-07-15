@@ -7,12 +7,12 @@ additional_params=""
 
 if [ "$2"  != "" ]; then
 	additional_params="&$2";
-	echo "Using additional params: $additional_params" 1>&2
+	echo "Using additional params: $additional_params"
 fi
 
 ### DOWNSTREAM ###
 
-echo "DOWNSTREAM connect" 2>&1
+echo "DOWNSTREAM connect"
 curl -s \
  "$STREAMING_API_URL/down?pair=$pair" > downstream.stt &
 down_pid="$!"
@@ -22,7 +22,7 @@ down_pid="$!"
 
 ### UPSTREAM ###
 
-echo "UPSTREAM connect" 2>&1
+echo "UPSTREAM connect"
 curl -s \
  --header "Content-Type: $format; rate=$rate" \
  --data-binary @$1 \
@@ -37,9 +37,9 @@ while true; do
 
   waiting=0;
   echo -ne "UP: "
-  is-running $up_pid && waiting=$((waiting+1)) && echo "open" 2>&1  || echo "closed" 2>&1
+  is-running $up_pid && waiting=$((waiting+1)) && echo "open"  || echo "closed"
   echo -ne "DOWN: "
-  is-running $down_pid && waiting=$((waiting+1)) && echo "open" 2>&1 || echo "closed" 2>&1;
+  is-running $down_pid && waiting=$((waiting+1)) && echo "open" || echo "closed";
 
   echo "Streaming SR results:"
   cat downstream.stt
