@@ -24,12 +24,13 @@ args = parser.parse_args()
 
 ###
 
-
 STREAMING_API_URL="https://www.google.com/speech-api/full-duplex/v1"
 API_KEY = os.environ['SR_API_KEY']
 HOSTNAME = socket.gethostname() + ""
 assert API_KEY != "", "Api key is empty"
 ###
+
+# helpers
 
 def encode_to_params(dict, prefix='?'):
  return prefix + \
@@ -38,10 +39,25 @@ def encode_to_params(dict, prefix='?'):
 def extend(a,b):
   return dict(a.items() + b.items())
 
+def genpair():
+  return format(random.randrange(0x1111111111111111,0xFFFFFFFFFFFFFFFF),'02X')
+
+def decode(s):
+  """ Decode a line of json to a dictionary """
+  # print "Decoding ", text
+  return json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(s);
+
+def encode(data,indent=None):
+  """ Encode dictionary as JSON with optional formatting """
+  return json.dumps(data, indent=indent )
+
+# end/helpers
+
 def curl(url, options=[] ):
   cmd = ["curl","-s"] + options + [url]
   p = subprocess.Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
   return p
+
 
 def downstream(pair):
   params = {'pair': pair}
@@ -58,10 +74,7 @@ def upstream(pair, audio_params, params):
             ["--data-binary", "@" + audio_params['filename']]
   return curl(url,options)
 
-def genpair():
-  return format(random.randrange(0x1111111111111111,0xFFFFFFFFFFFFFFFF),'02X')
-
-def streaming_call(audio_params, params):
+def streaming_call_sync(audio_params, params):
   pair = genpair()
   ds = downstream(pair)
   us = upstream(pair, audio_params, params)
@@ -69,25 +82,18 @@ def streaming_call(audio_params, params):
   rc = us.returncode
   return output
 
-
-def decode(text):
-  """ Decode a line of json to a dictionary """
-  # print "Decoding ", text
-  return json.JSONDecoder(object_pairs_hook=collections.OrderedDict).decode(text);
-
-def encode(data,indent=None):
-  return json.dumps(data, indent=indent )
-
-
-def recognize(audio_params, params):
-  raw_text = streaming_call(audio_params, params)
+def recognize_sync(audio_params, params):
+  """ Return speech recognition results as dict for an audio file """
+  raw_text = streaming_call_sync(audio_params, params)
   return [ decode(x) for x in raw_text.split("\n") if x != "" ]
 
+
+##############################
 
 
 params = {'lang':"en-US", "lm":"builtin:search"}
 audio_params = {'filename':args.file, 'format':"audio/l16", 'rate':"48000"}
-data = recognize(audio_params, params)
+data = recognize_sync(audio_params, params)
 print encode(data)
 
 
