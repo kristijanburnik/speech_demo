@@ -1,1 +1,0 @@
-the software on a hand-held device might only respond to one specific command

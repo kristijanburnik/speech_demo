@@ -100,7 +100,7 @@ def streaming_call_sync(audio_params, params):
   #  raise Exception("Process returned non-zero exit code " + str(rc))
   return output
 
-def get_mock_result():
+def mock_recognize_sync(audio_params, params):
   """ Mocked out result for faster testing by avoiding to call the remote API """
   return [
       {"result": []},
@@ -128,10 +128,10 @@ def recognize_sync(audio_params, params):
   raw_text = streaming_call_sync(audio_params, params)
   return [ decode(x) for x in raw_text.split("\n") if x != "" ]
 
-def runtest_recognize_sync(audio_params, params, mock=True):
+def do_recognize_sync(audio_params, params, mock=True):
   try:
     if args.mock:
-      results = get_mock_result()
+      results = mock_recognize_sync(audio_params, params)
     else:
       results = recognize_sync(audio_params, params)
     status = "success"
@@ -171,7 +171,7 @@ def test_samples(samples, input_file_path):
       audio_params = extend(default_audio_params, sample)
       audio_params['filename'] = os.path.join(input_file_path, audio_params['filename'])
       params = default_params
-      yield runtest_recognize_sync(audio_params, params)
+      yield do_recognize_sync(audio_params, params)
 
 
 def write_partial(text,mode="a",sufix="\n"):
@@ -189,7 +189,7 @@ def main():
   for x in test_samples(samples, input_file_path):
     index += 1
     sufix = "," if index != len(samples) else ""
-    write_partial( encode(x,2) + sufix)
+    write_partial( encode(x, 2) + sufix )
   write_partial("]")
 
 

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="SpeechRecognitionDemo" class="js consumer chrome">
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
     <meta content="Google Chrome is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier." name="description">
-    
+
   <!-- Legacy -->
 
     <script>
@@ -27,7 +27,7 @@
 
     <!-- WebRTC adapter  -->
     <script type="text/javascript" src="./adapter.js"></script>
-    
+
     <script src="./speech_files/autotrack.js"></script>
     <script src="./speech_files/chrome.min.js"></script>
 
@@ -50,34 +50,33 @@
       <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-	        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-	          <span style='color:white;'>Menu</span>
-	        </button>
-	        <a class="navbar-brand" href=".">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span style='color:white;'>Menu</span>
+          </button>
+          <a class="navbar-brand" href=".">
 
             <strong>Speech recognition</strong>
             <span class="label label-danger">DEMO</span>
           </a>
         </div>
-        
+
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
-	        <ul class="nav navbar-nav">
-	          <li ng-class="{'active':menu.section=='microphone'}"><a href="?x=mic#microphone"><i class="fa fa-microphone fa-align-left"></i> Via microphone</a></li>
+          <ul class="nav navbar-nav">
+            <li ng-class="{'active':menu.section=='microphone'}"><a href="?x=mic#microphone"><i class="fa fa-microphone fa-align-left"></i> Via microphone</a></li>
             <li ng-class="{'active':menu.section=='recorded'}"><a href="?x=rec#recorded"><i class="fa fa-file-audio-o fa-align-left"></i> Via recorded audio</a></li>
-	        </ul>			
-	      </div><!-- /.navbar-collapse -->
+          </ul>
+        </div><!-- /.navbar-collapse -->
       </nav>
 
-      <div class="container center-text">        
+      <div class="container center-text">
         <h3>Speech <i class="fa fa-arrow-right"></i> Text</h3>
       </div>
     </header>
-    
+
 
     <!-- MAIN -->
-    <div id="main" class="container" ng-controller="MainController">   
-
+    <div id="main" class="container" ng-controller="MainController">
       <!-- DEMO sticker  -->
       <div class="pull-right">
         <span class="label label-danger">DEMO</span>
@@ -91,23 +90,23 @@
 
       <!-- MESSAGES  -->
       <div id="message" class="ng-cloak">
-  
-        <!-- SPEECH RECOGNITION AVAILABILITY  -->    
-        <p ng-hide="sr.isAvailable()" class="alert alert-danger"> 
-          Web Speech API is not supported by this browser. 
+
+        <!-- SPEECH RECOGNITION AVAILABILITY  -->
+        <p ng-hide="sr.isAvailable()" class="alert alert-danger">
+          Web Speech API is not supported by this browser.
           Upgrade to <a href="https://www.google.com/chrome">Chrome</a> version 25 or later.
         </p>
-       
+
         <p ng-show="sr.isActive()" class="alert alert-info" >
           Speech recognition is active.
         </p>
-        
-        
+
+
         <p ng-show="sr.isUserMediaDecided() && !sr.isUserMediaAllowed()" id="info_blocked" class="alert alert-danger" >
           Permission to use microphone is blocked. To change, go to
           <a href="chrome://settings/contentExceptions#media-stream" target="_blank">chrome://settings/contentExceptions#media-stream</a>
         </p>
-        
+
         <div ng-hide="sr.isActive()">
           <p ng-hide="sr.isSpeechDetected()" id="info_no_speech" class="alert alert-warning">
             No speech was detected. You may need to adjust your <a href="https://support.google.com/chrome/bin/answer.py?hl=en&answer=1407892">microphone
@@ -124,50 +123,57 @@
           <p ng-show="sr.isMicrophoneReady() && !sr.isMicrophoneAllowed()" id="info_denied" class="alert alert-danger" >
             Permission to use microphone was denied.
           </p>
-         
+
         </div>
-        
-  
+
+
         <!-- No example chosen  -->
         <div class="alert alert-info" ng-hide="menu.section">
           Select an example from the top menu
         </div>
-        
+
       </div>
       <!-- /MESSAGES  -->
+      <div id="events"  ng-show="menu.section">
+          <span ng-repeat="event in events" class="label label-{{event.severity}}" style='display:inline-block'>{{event.type}} {{event.event.error}}</span>
+      </div>
 
       <div class="row">
-        <div class="col-md-12">          
+        <div class="col-md-12">
           <!-- Analyzer -->
           <div ng-include="src='ngapp/view/audio.analyzer.ngview.html'"></div>
-          
+
           <!-- Main View placholder -->
           <div ng-view></div>
 
+          <div ng-show="menu.section">
+            <button class='btn btn-primary' ng-click="sr.streamMicrophone(false)" ng-disabled="sr._isActive">Start default speech reco</button>
+            <button class='btn btn-success' ng-click="sr.streamMicrophone(true)" ng-disabled="sr._isActive">Start new speech reco</button>
+          </div>
 
           <h2>Recognition results</h2>
           Interim:<br>
           <textarea class="form-control" rows="5">{{transcript.interim}}</textarea>
-          
+
           <br>
           Final:<br>
           <textarea class="form-control" rows="5">{{transcript.final}}</textarea>
-          
+
         </div>
       </div>
 
     </div>
-    
+
     <footer>
       <div class="container">
         Google WebRTC team
       </div>
     </footer>
-   
+
     <!-- SUPPORTING SCRIPTS -->
 
       <!-- jQuery -->
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>  
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
       <!-- Bootstrap js -->
       <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>

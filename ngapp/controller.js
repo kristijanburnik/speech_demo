@@ -19,17 +19,17 @@ app
 
   $rootScope.menu = Menu;
   $rootScope.sr = SpeechRecognition.init();
-  
+
 })
 
-.controller("MicrophoneController",function( Menu , DemoSpeechRecognition ){
-  
-  Menu.set('microphone'); 
-  DemoSpeechRecognition().streamMicrophone();
-  
+.controller("MicrophoneController",function( Menu , $rootScope , DemoSpeechRecognition ){
+  Menu.set('microphone');
+  $rootScope.sr = DemoSpeechRecognition();
+
 })
 
-.controller("RecordedController",function( Menu , $scope , $rootScope, DemoSpeechRecognition , $http ){
+.controller("RecordedController",function(
+  Menu , $scope , $rootScope, DemoSpeechRecognition , $http ){
 
   Menu.set('recorded');
 
@@ -37,7 +37,7 @@ app
   $scope.selectSample = function( sample ){
      $scope.currentSample = sample;
   }
-  
+
   $scope.startRecognition = function ( sample ) {
     DemoSpeechRecognition().streamAudioFile( sample.filename );
   }
@@ -47,8 +47,6 @@ app
       $scope.samples = res.data
     })
 
-  
-  
 });
 
 

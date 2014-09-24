@@ -1,1 +1,0 @@
-that allows the end user to issue a wider array of commands
