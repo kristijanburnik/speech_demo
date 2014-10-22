@@ -15,12 +15,12 @@ from subprocess import Popen, PIPE
 ## Args
 
 parser = argparse.ArgumentParser(description='Run remote speech API and collect results on quality.')
-parser.add_argument('input_file', metavar='file', type=str,
+parser.add_argument('input_file', metavar='INPUT_META_FILE', type=str,
                    help='Input meta file')
 parser.add_argument('-x','--mock', default=False,
                     help="Use mocked out service", action="store_true")
 
-parser.add_argument('output_file', metavar='file', type=str,
+parser.add_argument('output_file', metavar='OUTPUT_META_FILE', type=str,
                    help='Output file for saving results')
 
 parser.add_argument('-l','--lang', default="en-US",
@@ -155,31 +155,25 @@ def do_recognize_sync(audio_params, params, mock=True):
 
 ##############################
 
-#
-# audio_params = {'filename':args.input_file, 'format':args.format, 'rate':args.rate}
-# data = verbose_test_sync(audio_params, params)
-# print encode(data, 2)
+default_params = params = {'lang':args.lang, "lm":args.lm}
+default_audio_params = {'format':args.format, 'rate':args.rate}
 
 def load_samples(file):
   text = open(file).read()
   return json.JSONDecoder().decode(text);
 
 def test_samples(samples, input_file_path):
-  default_params = params = {'lang':args.lang, "lm":args.lm}
-  default_audio_params = {'format':args.format, 'rate':args.rate}
   for sample in samples:
       audio_params = extend(default_audio_params, sample)
       audio_params['filename'] = os.path.join(input_file_path, audio_params['filename'])
       params = default_params
       yield do_recognize_sync(audio_params, params)
 
-
 def write_partial(text,mode="a",sufix="\n"):
   f = open(args.output_file,mode)
   f.write(text + sufix)
   print text
   f.close()
-
 
 def main():
   input_file_path = os.path.dirname(args.input_file)
@@ -191,6 +185,5 @@ def main():
     sufix = "," if index != len(samples) else ""
     write_partial( encode(x, 2) + sufix )
   write_partial("]")
-
 
 main()

@@ -13,10 +13,10 @@ app
       var numBars = Math.round( canvasWidth / SPACING );
       var freqByteData = new Uint8Array( t.analyserNode.frequencyBinCount );
 
-      t.analyserNode.getByteFrequencyData(freqByteData); 
+      t.analyserNode.getByteFrequencyData(freqByteData);
 
       var multiplier = t.analyserNode.frequencyBinCount / numBars;
-      
+
       var maxMagnitude = 0;
 
       // Draw rectangle for each frequency bin.
@@ -28,28 +28,28 @@ app
               magnitude += freqByteData[offset + j];
           magnitude = magnitude / multiplier;
           t.data[i] = { range: i , value: magnitude };
-          
+
       }
-    
+
        t._updateCallback( t.data );
-      
+
     },
-    
+
     _audioContext:null,
-   
+
     getAudioContext:function(){
       if ( ! t._audioContext  )
           t._audioContext = new AudioContext();
-      
+
       return t._audioContext;
     },
-  
+
     attachStream:function( stream ){
-    
+
       console.log("AudioAnalyzer attached stream" , stream );
-    
+
       var audioContext = t.getAudioContext();
-      var inputPoint = audioContext.createGain();      
+      var inputPoint = audioContext.createGain();
       var realAudioInput = audioContext.createMediaStreamSource( stream );
       realAudioInput.connect(inputPoint);
 
@@ -64,24 +64,24 @@ app
       inputPoint.connect( zeroGain );
       zeroGain.connect( audioContext.destination );
       setInterval ( t.updateAnalysers , 80 );
-       
+
       return t;
-      
+
     },
-    
+
     onUpdate:function( callback ){
       t._updateCallback = callback;
       return t;
     }
   };
-  
-  
+
+
   return t;
 })
 
 
 .service('Visualizer',function(){
-   
+
   var t = {
     lineUp:null,
     lineDown:null,
@@ -98,8 +98,8 @@ app
       t.lineUp = d3.svg.line()
           .x(function(d) { return d.range * t.widthFactor; })
           .y(function(d) { return height/2 - d.value * t.heightFactor; });
-          
-      
+
+
       t.lineDown = d3.svg.line()
           .x(function(d) { return d.range * t.widthFactor; })
           .y(function(d) { return height/2 + d.value * t.heightFactor; });
@@ -113,11 +113,11 @@ app
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         t.pathUp = svg.append("path")
-        t.pathDown = svg.append("path")        
-      
+        t.pathDown = svg.append("path")
+
     },
     update:function( data ){
-    
+
       t.pathUp
         .datum( data )
         .attr("class", "line")
@@ -131,13 +131,13 @@ app
         .attr("d", t.lineDown )
        ;
 
-    
+
       return t;
 
     }
-  
+
   }
-  
+
   return t;
 
 
